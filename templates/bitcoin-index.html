@@ -1,0 +1,388 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+<style>
+  .logo {
+    height: 40px;
+    width: 40px;
+  }
+
+  .main {
+    margin-top: 120px;
+  }
+</style>
+{% block scripts %}
+<link href="{% static 'assets/css/preclinic-style.css' %}" rel="stylesheet">
+{% endblock scripts %}
+
+<script type="text/javascript" src="{% static 'assets/js/validation.js' %}"></script>
+</head>
+
+
+
+<!-- MAIN -->
+<main role="main" class="main">
+  <!-- Main Carousel -->
+  {% if user.is_authenticated %}
+
+  <!--<section class="section background-white">-->
+  <div class="line">
+    <h2 class="text-thin headline text-center text-s-size-30 margin-bottom-50">Your Bitcoin Address: <span
+        style="color: #FF8C00"><b>{{user.first_name}}</b></span></h2>
+    <h4 align="center">
+      <!--<b>{{user.first_name}}</b>-->
+
+      {{detail.balance_usd}} USD
+
+    </h4>
+  </div>
+  <div align="center">
+    <style>
+      .button {
+        border-radius: 25px;
+        background-color: #4CAF50;
+        /* Green */
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+      }
+
+      .button1 {
+        border-radius: 25px;
+        background-color: #FF8C00;
+        color: black;
+        border: 2px solid #FF8C00;
+      }
+
+      .button1:hover {
+        background-color: white;
+        color: #FF8C00;
+      }
+    </style>
+
+    <a href="#"><button class="button button1" onclick="sendFunction()">Send Btcoin</button></a>
+    <a href="#"><button class="button button1" onclick="receiveFunction()">Receive Btcoin</button></a>
+
+  </div><br>
+  <!--</section>-->
+
+  <div align="center" id="sendbitcoin">
+    <!--<h1><b>Send Bitcoin</b></h1><br>-->
+    <h1>This Feature is Coming Soon</h1>
+    <p style="max-width: 400px; min-width: 100px;">
+      <b>
+        For now, you can have access to your funds by exporting it into another wallet provider that has the
+        functionality to send bitcoin .To do that, Click the button below to get your private key, so that you
+        can export it to another wallet provider
+      </b>
+    </p>
+    <button onclick="getpk()" style="border-radius: 20px;" class="btn golden-color">
+      Get Private Key
+    </button><br>
+    <div id="pk">
+      <h3><b>Your Private Key Is:</b></h3>
+      <b>{{user.last_name}}</b>
+    </div>
+
+  </div>
+
+  <div align="center" id="receivebitcoin" class="container">
+    <h1>Copy Your Address Below To Receive Bitcoin</h1>
+
+    <style>
+      .tooltip {
+        position: relative;
+        display: inline-block;
+      }
+
+      .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 300px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 150%;
+        left: 50%;
+        margin-left: -75px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .tooltip .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #555 transparent transparent transparent;
+      }
+
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+      }
+    </style>
+
+
+
+    <input type="text"  class="form-control" size="50" style="border-radius: 20px;" value="{{user.first_name}}" id="myInput" readonly>
+
+    <div class="tooltip">
+      <button onclick="myFunction()" onmouseout="outFunc()" style="border-radius: 20px;">
+        <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+        Copy Address
+      </button>
+
+
+    </div><br><br>
+
+    <h2>Or Scan Your QR Code Below</h2>
+
+    <div>
+      <img align="center" src="https://bitref.com/qrcode.php?data={{user.first_name}}">
+    </div>
+
+    <script>
+      function myFunction() {
+        var copyText = document.getElementById("myInput");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+
+        var tooltip = document.getElementById("myTooltip");
+        tooltip.innerHTML = "Copied: " + copyText.value;
+      }
+
+      function outFunc() {
+        var tooltip = document.getElementById("myTooltip");
+        tooltip.innerHTML = "Copy to clipboard";
+      }
+    </script>
+  </div>
+  <!--<br><br><br><br><br><br><br>-->
+
+  <script>
+    document.getElementById("receivebitcoin").style.display = "none";
+    document.getElementById("sendbitcoin").style.display = "none";
+    document.getElementById("pk").style.display = "none";
+
+    function receiveFunction() {
+      var x = document.getElementById("receivebitcoin");
+      var y = document.getElementById("details");
+      var z = document.getElementById("sendbitcoin")
+      var pk = document.getElementById("pk")
+      if (x.style.display === "none") {
+        z.style.display = "none";
+        y.style.display = "none";
+        x.style.display = "block";
+      } else {
+        z.style.display = "none";
+        x.style.display = "none";
+        y.style.display = "block";
+      }
+    }
+
+    function sendFunction() {
+      var x = document.getElementById("receivebitcoin");
+      var y = document.getElementById("details");
+      var z = document.getElementById("sendbitcoin")
+      if (z.style.display === "none") {
+        z.style.display = "block";
+        y.style.display = "none";
+        x.style.display = "none";
+      } else {
+        z.style.display = "none";
+        x.style.display = "none";
+        y.style.display = "block";
+      }
+    }
+
+    function getpk() {
+      pk.style.display = "block";
+    }
+  </script>
+
+
+
+  <section id="details">
+    <style>
+      table {
+        width: 100%;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid rgb(90, 86, 86);
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+      }
+
+      table#t01 tr:nth-child(even) {
+        background-color: #eee;
+      }
+
+      table#t01 tr:nth-child(odd) {
+        background-color: #fff;
+      }
+
+      table#t01 th {
+        background-color: #FF8C00;
+        color: white;
+      }
+    </style>
+    <br>
+    <h3 align="center"> Click Submit Below To See Details of <b>{{user.first_name}}</b></h3>
+    <!--<h3 align="center">Final Balance:       {{info1.balance}}</h3>-->
+
+    <form action="/" method="POST">
+      {% csrf_token %}
+
+      <style>
+        .button {
+          border-radius: 25px;
+          background-color: #4CAF50;
+          /* Green */
+          border: none;
+          color: white;
+          padding: 16px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          transition-duration: 0.4s;
+          cursor: pointer;
+        }
+
+        .button1 {
+          border-radius: 25px;
+          background-color: #FF8C00;
+          color: black;
+          border: 2px solid #FF8C00;
+        }
+
+        .button1:hover {
+          background-color: white;
+          color: #FF8C00;
+        }
+      </style>
+
+      <input type="hidden" name="addr" value="{{user.first_name}}"><br>
+      <h6 align="center"><input type="submit" value="Submit" class="button button1"></h6>
+    </form>
+
+    <table id="t01" class="container">
+      <tr>
+        <th> </th>
+        <th>BTC</th>
+        <th>USD</th>
+      </tr>
+      <tr>
+        <td>Transactions</td>
+        <td><b>{{detail.transactions}}</b></td>
+        <td><b> </b></td>
+      </tr>
+      <tr>
+        <td>Total Received</td>
+        <td><b>{{detail.total_received}}</b></td>
+        <td><b>{{detail.total_received_usd}} USD</b></td>
+      </tr>
+      <tr>
+        <td>Total Sent</td>
+        <td><b>{{detail.total_sent}}</b></td>
+        <td><b>{{detail.total_sent_usd}} USD</b></td>
+      </tr>
+      <tr>
+        <td>Final Balance</td>
+        <td><b>{{detail.balance}}</b></td>
+        <td><b>{{detail.balance_usd}} USD</b></td>
+      </tr>
+    </table>
+  </section>
+
+
+
+  {% else %}
+  <section class="section background-dark">
+    <div class="line">
+      <div class="carousel-fade-transition owl-carousel carousel-main carousel-nav-white carousel-wide-arrows">
+        <div class="item">
+          <div class="s-12 center">
+            <img src="{% static 'img/01-boxed.jpg' %}" alt="">
+            <div class="carousel-content">
+              <div class="padding-2x">
+                <div class="s-12 m-12 l-8">
+                  <p
+                    class="text-white text-s-size-20 text-m-size-40 text-l-size-60 margin-bottom-40 text-thin text-line-height-1">
+                    <b>Get Your Bitcoin Wallet In Seconds</b></p>
+                  <p class="text-white text-size-16 margin-bottom-40"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="s-12 center">
+            <img src="{% static 'img/02-boxed.jpg' %}" alt="">
+            <div class="carousel-content">
+              <div class="padding-2x">
+                <div class="s-12 m-12 l-8">
+                  <p
+                    class="text-white text-s-size-20 text-m-size-40 text-l-size-60 margin-bottom-40 text-thin text-line-height-1">
+                    <b>Control Your Funds At Your Finger Tips</b></p>
+                  <p class="text-white text-size-16 margin-bottom-30"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Section 4 -->
+  <section class="section background-white">
+    <div class="line">
+      <h2 class="text-thin headline text-center text-s-size-30 margin-bottom-50">Create An Account <span
+          style="color: #FF8C00">Now</span></h2>
+      <h4 align="center">
+        <b>And get a Bitcoin wallet for free</b>
+      </h4>
+
+    </div>
+  </section>
+  {% endif %}
+</main>
+
+
+</section>
+
+<script type="text/javascript" src="{% static 'js/responsee.js' %}"></script>
+<script type="text/javascript" src="{% static 'owl-carousel/owl.carousel.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/template-scripts.js' %}"></script>
+</body>
+
+</html>
+{% endblock content %}
